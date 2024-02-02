@@ -1,1 +1,17 @@
-<h2>Chao xìn</h2>
+<div class="row mt-4">
+  {{#each courses}}
+    <div class="col-sm-6 col-lg-4">
+      <div class="card mb-3" style="width: 18rem;">
+        <a href="/courses/{{slug}}" class="">
+          <img src="{{image}}" class="card-img-top" alt="..." />
+        </a>
+        <div class="card-body">
+          <a href="courses/{{slug}}" class="text-decoration-none">
+            <h5 class="card-title">{{name}}</h5>
+          </a>
+          <p class="card-text" style="">{{description}}</p>
+        </div>
+      </div>
+    </div>
+  {{/each}}
+</div>

@@ -1,0 +1,66 @@
+<div class="mt-4">
+  <div>
+    <h1>My courses</h1>
+    <a class="text-decoration-none" href="/me/trashed/courses">-- Courses trash --</a>
+  </div>
+  <table class="table mt-4">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Image</th>
+        <th scope="col">Created at</th>
+        <th scope="col">Updated at</th>
+        <th scope="col">Command</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each courses}}
+        <tr>
+          <th scope="row">{{sum @index 1}}</th>
+          <td>{{name}}</td>
+          <td>{{description}}</td>
+          <td><img src="{{image}}" class="img-fluid" /></td>
+          <td>{{setTime createdAt}}</td>
+          <td>{{setTime updatedAt}}</td>
+          <td>
+            <a href="/courses/edit/{{_id}}" class="btn btn-outline-primary form-control">Edit</a>
+            <a class="btn btn-outline-danger form-control mt-2 btn-delete-courses" data-bs-toggle="modal" data-bs-target="#deleteModal" id="{{_id}}" name="{{name}}" data-bs-img="{{image}}">Trash</a>
+          </td>
+        </tr>
+      {{else}}
+        <tr>
+          <td colspan="7" class="text-center">You haven't added any courses yet. <a class="text-decoration-none" href="/courses/create">Click here to add courses!</a></td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="deleteModalLabel">Are your sure delete?</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label id="name-delete"></label>
+        <img id="img-delete" src="" width="100" class="img-fluid" />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary btn-active-delete-courses">Active delete</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<form name="delete-form" method="POST"></form>
+<script>
+  document.addEventListener("DOMContentLoaded", function () { $(document).on("click",".btn-delete-courses", function () { $(`#deleteModal label[id="name-delete"]`).text(this.name); $(`#deleteModal
+  button.btn-active-delete-courses`).attr('id',this.id); $(`#deleteModal img[id="img-delete"]`).attr('src', this.dataset.bsImg); }); $(document).on("click", ".btn-active-delete-courses", function () { var form =
+  document.querySelector("form"); form.action = "/courses/delete/" + this.id + "?_method=DELETE"; form.submit(); }); });
+</script>

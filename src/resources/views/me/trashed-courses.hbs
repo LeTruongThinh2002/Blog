@@ -1,0 +1,68 @@
+<div class="mt-4">
+  <div>
+    <a class="text-decoration-none" href="/me/stored/courses">Back to courses store</a>
+    <h1>Courses trash</h1>
+  </div>
+  <table class="table mt-4">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Image</th>
+        <th scope="col">Created at</th>
+        <th scope="col">Updated at</th>
+        <th scope="col">Command</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each courses}}
+        <tr>
+          <th scope="row">{{sum @index 1}}</th>
+          <td>{{name}}</td>
+          <td>{{description}}</td>
+          <td><img src="{{image}}" class="img-fluid" /></td>
+          <td>{{setTime createdAt}}</td>
+          <td>{{setTime updatedAt}}</td>
+          <td>
+            <a class="btn btn-outline-primary form-control btn-restore-courses" data-bs-id="{{_id}}">Restore</a>
+            <a class="btn btn-outline-danger form-control mt-2 btn-trash-courses" data-bs-toggle="modal" data-bs-target="#trashModal" id="{{_id}}" name="{{name}}" data-bs-img="{{image}}">trash</a>
+          </td>
+        </tr>
+      {{else}}
+        <tr>
+          <td colspan="7" class="text-center">You haven't trashed any courses yet.</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="trashModal" tabindex="-1" aria-labelledby="trashModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="trashModalLabel">Are your sure delete forever?</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label id="name-trash"></label>
+        <img id="img-trash" src="" width="100" class="img-fluid" />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary btn-active-trash-courses">Delete forever</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<form id="trash-form" method="POST"></form>
+<form id="restore-form" method="POST"></form>
+<script>
+  document.addEventListener("DOMContentLoaded", function () { $(document).on("click",".btn-trash-courses", function () { $(`#trashModal label[id="name-trash"]`).text(this.name); $(`#trashModal
+  button.btn-active-trash-courses`).attr('id',this.id); $(`#trashModal img[id="img-trash"]`).attr('src', this.dataset.bsImg); }); $(document).on("click", ".btn-restore-courses", function () { var restoreForm =
+  document.getElementById("restore-form"); restoreForm.action = "/courses/" + this.dataset.bsId + "/restore?_method=PATCH"; restoreForm.submit(); }); $(document).on("click", ".btn-active-trash-courses", function () { var deleteForm =
+  document.getElementById("trash-form"); deleteForm.action = "/courses/" + this.id + "?_method=DELETE"; deleteForm.submit(); }); });
+</script>
